@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forgeborn — The RPG You Can Only Win By Getting Fit</title>
+<meta name="description" content="Forgeborn is the first RPG where your real-world workouts are the only way to level up. Train. Grow. Repair the world. Join the waitlist.">
+<meta property="og:title" content="Forgeborn — Train in the Real World. Conquer the Game World.">
+<meta property="og:description" content="The first RPG where you can only win by actually getting fit. Join the Forgeborn.">
+<meta property="og:image" content="/og-image.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@300;400;500;600&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --void: #080810;
+    --surface: #10101a;
+    --panel: #16161f;
+    --border: #252535;
+    --ember: #f97316;
+    --gold: #f5c542;
+    --text: #eeeef5;
+    --muted: #9090b0;
+    --dim: #50505f;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* BG TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% -10%, rgba(249,115,22,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 80% 80%, rgba(245,197,66,0.06) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* LAYOUT */
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* NAV */
+  nav {
+    padding: 24px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    background: linear-gradient(135deg, var(--gold), var(--ember));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .nav-tag {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    padding: 4px 12px;
+    border-radius: 100px;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 80px 0 60px;
+    text-align: center;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 28px;
+  }
+  .eyebrow::before, .eyebrow::after {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--ember);
+    opacity: 0.5;
+  }
+
+  h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(38px, 10vw, 72px);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    background: linear-gradient(160deg, #fff 30%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .tagline {
+    font-size: clamp(15px, 3vw, 19px);
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.5;
+    margin-bottom: 48px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .tagline em {
+    color: var(--text);
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  /* FORM */
+  .signup-form {
+    display: flex;
+    gap: 10px;
+    max-width: 440px;
+    margin: 0 auto 16px;
+    flex-wrap: wrap;
+  }
+  .signup-form input {
+    flex: 1;
+    min-width: 200px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .signup-form input::placeholder { color: var(--dim); }
+  .signup-form input:focus { border-color: var(--ember); }
+  .signup-form button {
+    background: var(--ember);
+    color: white;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 14px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+  .signup-form button:hover { opacity: 0.9; }
+  .signup-form button:active { transform: scale(0.98); }
+
+  .form-note {
+    font-size: 12px;
+    color: var(--dim);
+    text-align: center;
+  }
+
+  .success-msg {
+    display: none;
+    text-align: center;
+    padding: 20px;
+    background: rgba(74, 222, 128, 0.06);
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    border-radius: 12px;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+  .success-msg.show { display: block; }
+  .success-msg p { font-size: 15px; color: #4ade80; }
+  .success-msg span { display: block; font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  /* COUNTER */
+  .counter {
+    text-align: center;
+    margin: 40px 0;
+    padding: 24px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+  }
+  .counter-num {
+    font-family: 'Cinzel', serif;
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--gold);
+    display: block;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .counter-label { font-size: 13px; color: var(--muted); }
+
+  /* DIVIDER */
+  .divider {
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin: 56px 0 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* HOW IT WORKS */
+  .steps {
+    display: grid;
+    gap: 2px;
+    margin-bottom: 56px;
+  }
+  .step {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 16px;
+    align-items: start;
+    transition: border-color 0.2s;
+  }
+  .step:hover { border-color: rgba(249,115,22,0.3); }
+  .step:first-child { border-radius: 12px 12px 4px 4px; }
+  .step:last-child { border-radius: 4px 4px 12px 12px; }
+  .step-num {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ember);
+    opacity: 0.7;
+    line-height: 1;
+    padding-top: 2px;
+  }
+  .step h3 {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .step p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* CLASSES */
+  .classes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 56px;
+  }
+  @media (max-width: 500px) {
+    .classes { grid-template-columns: 1fr; }
+  }
+  .class-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+  }
+  .class-icon { font-size: 28px; margin-bottom: 10px; display: block; }
+  .class-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .class-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .class-workout { font-size: 11px; color: var(--ember); margin-top: 8px; }
+
+  /* QUOTE */
+  .quote-block {
+    border-left: 2px solid var(--ember);
+    padding: 20px 24px;
+    margin-bottom: 56px;
+    background: rgba(249,115,22,0.04);
+    border-radius: 0 12px 12px 0;
+  }
+  .quote-text {
+    font-size: 17px;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+  .quote-attr { font-size: 13px; color: var(--muted); }
+
+  /* BOTTOM CTA */
+  .bottom-cta {
+    text-align: center;
+    padding: 56px 0 80px;
+    border-top: 1px solid var(--border);
+  }
+  .bottom-cta h2 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(22px, 5vw, 34px);
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .bottom-cta p {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    text-align: center;
+    font-size: 12px;
+    color: var(--dim);
+  }
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <nav>
+    <span class="logo">Forgeborn</span>
+    <span class="nav-tag">Coming Soon</span>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="eyebrow">The RPG that requires real effort</div>
+    <h1>Forgeborn</h1>
+    <p class="tagline">The first RPG where you can only level up by <em>actually training.</em> Your real workouts power your character. Your guild needs you to show up. The world is counting on it.</p>
+
+    <div class="signup-form" id="signupForm">
+      <input type="email" id="emailInput" placeholder="your@email.com" autocomplete="email" />
+      <button onclick="handleSignup()">Join the Forgeborn</button>
+    </div>
+
+    <div class="success-msg" id="successMsg">
+      <p>⚔️ You've been added to the Forgeborn roster.</p>
+      <span>We'll contact you the moment the gates open. Train well.</span>
+    </div>
+
+    <p class="form-note">No spam. Just your launch invite and nothing else.</p>
+
+    <div class="counter">
+      <span class="counter-num" id="counterNum">0</span>
+      <span class="counter-label">Forgeborn recruits waiting</span>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <div class="divider">How it works</div>
+
+  <div class="steps">
+    <div class="step">
+      <span class="step-num">I</span>
+      <div>
+        <h3>Create your Forgeborn character</h3>
+        <p>Choose your class — Ironguard, Wayfarer, or Stillmind. Each reflects a real workout style. Your class shapes your abilities, your story, and the world you rebuild.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">II</span>
+      <div>
+        <h3>Train in the real world</h3>
+        <p>Complete real workouts. The app syncs with Apple Health and Google Health to verify your sessions automatically. No workout, no XP. That's the rule — and it's the whole point.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">III</span>
+      <div>
+        <h3>Level up your character, repair the world</h3>
+        <p>Every session earns XP, upgrades your stats, and advances a serialised story. The more you train, the more powerful you become — and the more of Aethon you restore.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">IV</span>
+      <div>
+        <h3>Join a guild. Take on Raid Bosses together.</h3>
+        <p>Form a guild of up to 10 warriors. Weekly Raid Bosses can only be defeated if your whole team keeps training. One member slacks, the team suffers. Real accountability — earned, not forced.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLASSES -->
+  <div class="divider">Choose your class</div>
+
+  <div class="classes">
+    <div class="class-card">
+      <span class="class-icon">⚔️</span>
+      <div class="class-name">Ironguard</div>
+      <div class="class-desc">Strength and power. The shield between your guild and the dark.</div>
+      <div class="class-workout">Weights · HIIT · Bodyweight</div>
+    </div>
+    <div class="class-card">
+      <span class="class-icon">🏹</span>
+      <div class="class-name">Wayfarer</div>
+      <div class="class-desc">Speed and endurance. The veins that carry life across a dying world.</div>
+      <div class="class-workout">Running · Cycling · Sport</div>
+    </div>
+    <div class="class-card">
+      <span class="class-icon">🔮</span>
+      <div class="class-name">Stillmind</div>
+      <div class="class-desc">Focus and wisdom. The rarest power — earned through discipline, not force.</div>
+      <div class="class-workout">Yoga · Pilates · Mobility</div>
+    </div>
+  </div>
+
+  <!-- QUOTE -->
+  <div class="quote-block">
+    <p class="quote-text">"You are not just getting fit. Every workout you complete repairs the world. The Weave is watching. It always notices."</p>
+    <p class="quote-attr">— Aldric Vesper, Forgemaster of Kaelthas</p>
+  </div>
+
+  <!-- BOTTOM CTA -->
+  <div class="bottom-cta">
+    <h2>The world needs Forgeborn.<br>Are you one of them?</h2>
+    <p>Get early access before public launch. First 500 recruits unlock Founding Warrior status.</p>
+
+    <div class="signup-form" style="justify-content:center;">
+      <input type="email" id="emailInput2" placeholder="your@email.com" autocomplete="email" />
+      <button onclick="handleSignup2()">Claim your place</button>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="container">
+    © 2026 Forgeborn · <a href="mailto:hello@forgeborn.app" style="color:var(--dim);">hello@forgeborn.app</a>
+  </div>
+</footer>
+
+<script>
+  // ── Simulated waitlist counter (replace with real Supabase call) ──
+  // When you have Supabase set up, replace this with a real count query
+  // from a `waitlist` table. For now shows an animated placeholder.
+
+  function animateCounter() {
+    const el = document.getElementById('counterNum')
+    let count = 0
+    const target = 47 // replace with real count from Supabase
+    const duration = 1200
+    const step = target / (duration / 16)
+    const timer = setInterval(() => {
+      count = Math.min(count + step, target)
+      el.textContent = Math.floor(count).toLocaleString()
+      if (count >= target) clearInterval(timer)
+    }, 16)
+  }
+
+  window.addEventListener('load', () => setTimeout(animateCounter, 400))
+
+  // ── Email signup ──
+  // HOW TO CONNECT TO SUPABASE:
+  // 1. Create a `waitlist` table in Supabase: id (uuid), email (text unique), created_at (timestamptz)
+  // 2. Enable RLS, add INSERT policy for anon
+  // 3. Replace the fetch below with your Supabase anon key and project URL
+  // 4. Remove the fake success and use real response handling
+
+  async function handleSignup() {
+    const email = document.getElementById('emailInput').value.trim()
+    if (!validateEmail(email)) {
+      document.getElementById('emailInput').style.borderColor = '#ef4444'
+      return
+    }
+    await submitEmail(email)
+  }
+
+  async function handleSignup2() {
+    const email = document.getElementById('emailInput2').value.trim()
+    if (!validateEmail(email)) {
+      document.getElementById('emailInput2').style.borderColor = '#ef4444'
+      return
+    }
+    await submitEmail(email)
+  }
+
+  async function submitEmail(email) {
+    // ── REPLACE THIS BLOCK WITH YOUR SUPABASE CALL ──
+    // const res = await fetch('https://YOUR_PROJECT.supabase.co/rest/v1/waitlist', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'apikey': 'YOUR_ANON_KEY',
+    //     'Authorization': 'Bearer YOUR_ANON_KEY'
+    //   },
+    //   body: JSON.stringify({ email })
+    // })
+
+    // For now — show success and bump counter
+    document.getElementById('signupForm').style.display = 'none'
+    document.getElementById('successMsg').classList.add('show')
+    const el = document.getElementById('counterNum')
+    el.textContent = (parseInt(el.textContent.replace(',','')) + 1).toLocaleString()
+  }
+
+  function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  }
+</script>
+
+</body>
+</html>
